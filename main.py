@@ -535,3 +535,4 @@ def get_dashboard(db: Session = Depends(get_db)):
         "total_sales": total_sales,
         "total_revenue": total_revenue
     }
+
