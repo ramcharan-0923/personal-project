@@ -18,6 +18,8 @@ class ProductResponse(ProductCreate):
 class CustomerCreate(BaseModel):
     name: str
     phone: str
+    email: str | None = None
+    address: str | None = None
 
 
 class SaleCreate(BaseModel):
