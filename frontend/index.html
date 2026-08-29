@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="style.css">
+
+    <title>General Store Management</title>
+</head>
+
+<body>
+
+    <h1>General Store Management</h1>
+
+    <!-- Products -->
+    <section>
+        <h2>Products</h2>
+
+        <button onclick="loadProducts()">View Products</button>
+
+        <div id="products"></div>
+    </section>
+
+
+    <!-- Add Product -->
+    <section>
+        <h2>Add Product</h2>
+
+        <form id="productForm">
+
+            <input type="text" id="name" placeholder="Product Name" required>
+
+            <input type="text" id="category" placeholder="Category" required>
+
+            <input type="number" id="price" placeholder="Price" required>
+
+            <input type="number" id="quantity" placeholder="Stock" required>
+
+            <button type="submit">Add Product</button>
+
+        </form>
+    </section>
+
+
+    <!-- Customers -->
+    <section>
+        <h2>Customers</h2>
+
+        <button onclick="loadCustomers()">View Customers</button>
+
+        <div id="customers"></div>
+    </section>
+
+
+    <!-- Sales -->
+    <section>
+        <h2>Sales</h2>
+
+        <button onclick="loadSales()">View Sales</button>
+
+        <div id="sales"></div>
+    </section>
+
+
+    <!-- Feedback -->
+    <section>
+        <h2>Feedback</h2>
+
+        <button onclick="loadFeedback()">View Feedback</button>
+
+        <div id="feedback"></div>
+    </section>
+
+
+    <!-- Billing -->
+    <section>
+        <h2>Billing</h2>
+
+        <input type="number" id="billSaleId" placeholder="Sale ID">
+
+        <button onclick="loadBill()">View Bill</button>
+
+        <div id="bill"></div>
+    </section>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
