@@ -37,3 +37,11 @@ class Customer(Base):
     email = Column(String(100), nullable=True)
     address = Column(String(200), nullable=True)
 
+
+class Feedback(Base):
+    __tablename__ = "feedback"
+
+    id = Column(Integer, primary_key=True, index=True)
+    customer_id = Column(Integer, nullable=False)
+    message = Column(String, nullable=False)
+    rating = Column(Integer, nullable=False)

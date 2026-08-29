@@ -1,5 +1,6 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends,Query
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 
 import models
 import schemas
@@ -295,10 +296,25 @@ def create_sale(
     return new_sale
 
 
-# Get all sales
 @app.get("/sales")
 def get_sales(db: Session = Depends(get_db)):
-    return db.query(models.Sale).all()
+    sales = db.query(models.Sale).all()
+
+    result = []
+
+    for sale in sales:
+        total = db.query(
+            func.sum(models.SaleItem.quantity * models.SaleItem.price)
+        ).filter(
+            models.SaleItem.sale_id == sale.id
+        ).scalar()
+
+        result.append({
+            "id": sale.id,
+            "total_amount": total or 0
+        })
+
+    return result
 
 
 # Get sale by ID
@@ -577,3 +593,60 @@ def get_dashboard(
         "total_sales": total_sales,
         "total_revenue": total_revenue
     }
+
+
+@app.post("/sale-items")
+def create_sale_item(
+    sale_id: int,
+    product_id: int,
+    quantity: int,
+    price: float,
+    db: Session = Depends(get_db)
+):
+    product = db.query(models.Product).filter(
+        models.Product.id == product_id
+    ).first()
+
+    if not product:
+        return {"message": "Product not found"}
+
+    if product.stock < quantity:
+        return {"message": "Not enough stock"}
+
+    sale_item = models.SaleItem(
+        sale_id=sale_id,
+        product_id=product_id,
+        quantity=quantity,
+        price=price
+    )
+
+    product.stock -= quantity
+
+    db.add(sale_item)
+    db.commit()
+    db.refresh(sale_item)
+
+    return sale_item
+
+@app.post("/feedback")
+def create_feedback(
+    customer_id: int,
+    message: str,
+    rating: int = Query(...,ge=1,le=5),
+    db: Session = Depends(get_db)
+):
+    feedback = models.Feedback(
+        customer_id=customer_id,
+        message=message,
+        rating=rating
+    )
+
+    db.add(feedback)
+    db.commit()
+    db.refresh(feedback)
+
+    return feedback
+
+@app.get("/feedback")
+def get_feedback(db: Session = Depends(get_db)):
+    return db.query(models.Feedback).all()
